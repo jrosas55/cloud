@@ -1,6 +1,5 @@
 resource "aws_vpc" "vpc_viginia" {
   cidr_block = var.virginia_cidr
-  # ya no se usa     cidr_block = lookup(var.virginia_cidr,terraform.workspace)
   tags = {
     "Name" = "vpc_virginia-${local.sufix}"
   }
@@ -23,7 +22,6 @@ resource "aws_subnet" "private_subnet" {
   tags = {
     "Name" = "private_subnet_1-${local.sufix}"
   }
-  #    tags = var.tags
   depends_on = [
   aws_subnet.public_subnet]
 }
@@ -70,36 +68,11 @@ resource "aws_security_group" "sg_public_instance" {
     }
   }
 
-  ###   ingress {
-  ###     description = "SSH over Internet"
-  ###     from_port   = 22
-  ###     to_port     = 22
-  ###     protocol    = "tcp"
-  ###     cidr_blocks = [var.sg_ingress_cidr]
-  ###   }
-  ### 
-  ###   ingress {
-  ###     description = "http over Internet"
-  ###     from_port   = 80
-  ###     to_port     = 80
-  ###     protocol    = "tcp"
-  ###     cidr_blocks = [var.sg_ingress_cidr]
-  ###   }
-  ### 
-  ###   ingress {
-  ###     description = "https over Internet"
-  ###     from_port   = 443
-  ###     to_port     = 443
-  ###     protocol    = "tcp"
-  ###     cidr_blocks = [var.sg_ingress_cidr]
-  ###   }
-
   egress {
     from_port        = 0
     to_port          = 0
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
   }
 
   tags = {
